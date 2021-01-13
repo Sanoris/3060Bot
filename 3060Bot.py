@@ -21,15 +21,15 @@ class Client():
         self.BBbtn = re.compile(r">add to cart<", re.IGNORECASE)
         self.MicroRE = re.compile(r"<span>in stock</span>", re.IGNORECASE)
         self.number ='+1' + number
-        self.SMSclient = SMS(self.sid, self.auth_token)
         self.SentSMS = False
         self.inCart = False
 
-        #This block is the info for MY twilio license. You can use it, but there is potential for me to see all messages you send
+        #This block notifies you when the purchase process has been initiated
         #So probably get your own license - it's free
-        self.sid = 'AC3555e7ce04a04bd62e28225433c2f0b5'
-        self.auth_token = '73ce5b670ca8e1e505af70d0a483af6a'
-        self.twiphone = '+12606576848'
+        self.sid = ''
+        self.auth_token = ''
+        self.twiphone = ''
+        self.SMSclient = SMS(self.sid, self.auth_token)
 
         #Fill out your info here
         self.CreditCardNum = ''
@@ -40,6 +40,7 @@ class Client():
         self.name2 = ''
         self.city = ''
         self.zip = ''
+        self.email = ''
 
     def checkBB(self):
         try:
@@ -101,7 +102,7 @@ class Client():
                 ZIP = self.driver.find_element_by_xpath('//input[@id="payment.billingAddress.zipcode"]')
                 CC = self.driver.find_element_by_xpath('//input[@id="optimized-cc-card-number"]')
 
-                CC.send_keys(self.CCnum)
+                CC.send_keys(self.CreditCardNum)
                 Address1.click()
                 Address1.click()
                 Address1.send_keys(self.address1)
@@ -119,9 +120,9 @@ class Client():
                 CCid = self.driver.find_element_by_xpath('//input[@id="credit-card-cvv"]')
                 CCid.send_keys(self.CVV)
                 self.driver.execute_script("document.getElementById('payment.billingAddress.state').children[53].selected = true")
-                break
                 #ORDER!!!!!!!!!
                 self.driver.find_element_by_xpath('//button[@class="btn btn-lg btn-block btn-primary" and @data-track="Place your Order - Contact Card"]').click()
+                break
             except:
                 print('Uh oh...')
             
